@@ -86,16 +86,27 @@ int main() {
   
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
-
   cudaEventElapsedTime(&elapsedTime, start, stop);
+  printf("windowSumNaive: %f ms\n", elapsedTime);
+  // cudaEventDestroy(start);
+  // cudaEventDestroy(stop);
+  
+  // cudaEvent_t start, stop;
+  elapsedTime = 0.0;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start, 0);
 
-  printf("%f\n", elapsedTime);
+  windowSum(A, B, n);
+
+  cudaEventRecord(stop, 0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&elapsedTime, start, stop);
+  printf("windowSum: %f ms\n", elapsedTime);
 
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
-  
-  
-  windowSum(A, B, n);
+
   delete [] A;
   delete [] B;
   return 0;
